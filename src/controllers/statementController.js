@@ -1,6 +1,7 @@
 import dayjs from "dayjs";
 import { stripHtml } from "string-strip-html";
 import { sessions, statement, users } from "../database/db.js";
+import { ObjectId } from "mongodb";
 
 export async function statementGet(req, res) {
   const { token } = req;
@@ -39,6 +40,47 @@ export async function statementPost(req, res) {
     await statement.insertOne(fullStatement);
     res.sendStatus(200);
 
+  } catch (err) {
+    console.log(err.message);
+    res.sendStatus(500);
+  }
+}
+
+export async function statementPut(req, res) {
+  const { token } = req;
+  const { id } = req.params;
+
+  const { type, value, desc } = req.data;
+  const data = {
+    type: stripHtml(type).result.trim(),
+    value: stripHtml(value).result.trim(),
+    desc: stripHtml(desc).result.trim(),
+  }
+
+  try {
+    await statement.updateOne({_id: ObjectId(id)}, {$set: data});
+    res.sendStatus(200);
+
+  } catch (err) {
+    console.log(err.message);
+    res.sendStatus(500);
+  }
+}
+
+export async function statementDelete(req, res) {
+  const { token } = req;
+  const { id } = req.params;
+
+  try {
+    const session = await sessions.findOne({token});
+    const user = await users.findOne({_id: session?.userId});
+    if (!user) return res.sendStatus(401);
+
+    const foundStatement = await statement.findOne(new ObjectId(id));
+    if (!foundStatement) return res.sendStatus(404);
+
+    await statement.deleteOne(foundStatement);
+    res.sendStatus(200);
   } catch (err) {
     console.log(err.message);
     res.sendStatus(500);
