@@ -12,7 +12,7 @@ try {
 }
 
 // MongoDB
-const db = client.db('myWalletTest');
+const db = client.db('myWallet');
 export const users = db.collection("users");
 export const statement = db.collection("statement");
 export const sessions = db.collection("sessions");
