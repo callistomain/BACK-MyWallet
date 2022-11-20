@@ -9,6 +9,6 @@ export async function dataSchemaValidation(req, res, next) {
     return res.status(422).send(message);
   }
 
-  req.data = data;
+  req.locals.data = data;
   next();
 }

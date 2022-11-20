@@ -9,6 +9,6 @@ export async function userSchemaValidation(req, res, next) {
     return res.status(422).send(message);
   }
 
-  req.user = user;
+  req.locals.user = user;
   next();
 }

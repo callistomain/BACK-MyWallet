@@ -5,7 +5,7 @@ import { sessions, users } from "../database/db.js";
 
 
 export async function signupPost(req, res) {
-  const { name, email, password } = req.user;
+  const { name, email, password } = req.locals.user;
   const user = {
     name: stripHtml(name).result.trim(),
     email: stripHtml(email).result.trim(),
