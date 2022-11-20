@@ -3,6 +3,6 @@ export async function tokenValidation(req, res, next) {
   const token = authorization?.replace("Bearer ", "");
   if (!token) return res.sendStatus(401);
 
-  req.locals.token = token;
+  req.token = token;
   next();
 }

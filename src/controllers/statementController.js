@@ -4,7 +4,7 @@ import { sessions, statement, users } from "../database/db.js";
 import { ObjectId } from "mongodb";
 
 export async function statementGet(req, res) {
-  const { token } = req.locals;
+  const { token } = req;
 
   try {
     const session = await sessions.findOne({token});
@@ -21,9 +21,9 @@ export async function statementGet(req, res) {
 }
 
 export async function statementPost(req, res) {
-  const { token } = req.locals;
+  const { token } = req;
 
-  const { type, value, desc } = req.locals.data;
+  const { type, value, desc } = req.data;
   const data = {
     type: stripHtml(type).result.trim(),
     value: stripHtml(value).result.trim(),
@@ -49,7 +49,7 @@ export async function statementPost(req, res) {
 export async function statementPut(req, res) {
   const { id } = req.params;
 
-  const { type, value, desc } = req.locals.data;
+  const { type, value, desc } = req.data;
   const data = {
     type: stripHtml(type).result.trim(),
     value: stripHtml(value).result.trim(),
@@ -67,7 +67,7 @@ export async function statementPut(req, res) {
 }
 
 export async function statementDelete(req, res) {
-  const { token } = req.locals;
+  const { token } = req;
   const { id } = req.params;
 
   try {
@@ -87,7 +87,7 @@ export async function statementDelete(req, res) {
 }
 
 export async function sessionDelete (req, res) {
-  const { token } = req.locals;
+  const { token } = req;
 
   try {
     const {deletedCount} = await sessions.deleteOne({token});
